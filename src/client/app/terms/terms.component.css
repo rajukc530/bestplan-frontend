@@ -1,0 +1,59 @@
+.container {
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+#how-it-work {
+  padding-top: 1em !important;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Tajawal");
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+
+section {
+  padding: 60px 0;
+}
+
+#accordion-style-1 h1,
+#accordion-style-1 a {
+  color: #0058BC;
+}
+#accordion-style-1 .btn-link {
+  font-weight: 400;
+  color: #0058BC;
+  background-color: transparent;
+  text-decoration: none !important;
+  font-size: 16px;
+  font-weight: bold;
+  padding-left: 25px;
+}
+
+#accordion-style-1 .card-body {
+  border-top: 2px solid #0058BC;
+}
+
+#accordion-style-1 .card-header .btn.collapsed .fa.main {
+  display: none;
+}
+
+#accordion-style-1 .card-header .btn .fa.main {
+  background: #0058BC;
+  padding: 13px 11px;
+  color: #ffffff;
+  width: 35px;
+  height: 41px;
+  position: absolute;
+  left: -1px;
+  top: 10px;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  display: block;
+}
+
+.steps-details p {
+  font-size: 14px;
+  line-height: 20px;
+}

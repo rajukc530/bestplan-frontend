@@ -1,0 +1,878 @@
+<!-- <div class="container">
+  <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="home-tab-just" data-toggle="tab" href="#personal-information" role="tab" aria-controls="personal-information"
+        aria-selected="true">Personlig Information</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="profile-tab-just" data-toggle="tab" href="#plan-information" role="tab" aria-controls="plan-information"
+        aria-selected="false">Planer</a>
+    </li>
+  </ul>
+  <div class="tab-content card pt-5" id="myTabContentJust">
+    <div class="tab-pane fade show active" id="personal-information" role="tabpanel" aria-labelledby="home-tab-just">
+      <div class="wrapper">
+        <div class="row">
+          <form [formGroup]="targetWeightForm">
+            <div class="col">
+              <div class="col-xs-12 col-sm-12">
+                <div class="ms-field left-text">
+                  <span class="ms-field-title">Fødselsdag</span>
+                  <input data-ms class="ms-input" type="text" value="{{ profile.dob }}" [disabled]="true">
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-12">
+                  <div class="ms-field left-text">
+                    <span class="ms-field-title">Din målsætning</span>
+                    <input data-ms class="ms-input" type="text" value="{{ profile.goal }}" [disabled]="true">
+                  </div>
+                </div>
+              <div class="col-xs-12 col-sm-12">
+                <div class="ms-field left-text">
+                  <span class="ms-field-title">Køn</span>
+                  <input data-ms class="ms-input" type="text" value="{{ profile.gender }}" [disabled]="true">
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-12">
+                <div class="ms-field left-text">
+                  <span class="ms-field-title">Vægt (kg)</span>
+                  <input data-ms class="ms-input" type="number" value="{{ recentWeight }}" formControlName="targetWeight">
+                  <div *ngIf="showUpdateWeight" class="alert alert-danger">
+                    Your current weight has been saved.
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-12">
+                <div class="ms-field left-text">
+                  <span class="ms-field-title">Højde (cm)</span>
+                  <input data-ms class="ms-input" type="text" value="{{ profile.height }}" [disabled]="true">
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-12">
+                <div class="ms-field left-text">
+                  <span class="ms-field-title">Goal Vægt (kg)</span>
+                  <input data-ms class="ms-input" type="text" value="{{ goalWeight }}" [disabled]="true">
+                </div>
+                <div class="ms-control">
+                  <button class="btn btn-primary ms-button" type="button" (click)="updateWeight(targetWeightForm)"
+                    [disabled]="!targetWeightForm.valid">Opdater</button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="col">
+            <div class="text-center doughnut-canvas" style="width: 300px; height: 300px;">
+              <div style="display: block">
+                <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"
+                  [colors]="doughnutChartColors"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="ms-title col-md-12">
+              Vægtudvikling
+          </div>
+        </div>
+        <div class="row">
+            <canvas class="line-canvas" baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+            [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="plan-information" role="tabpanel" aria-labelledby="profile-tab-just">
+      <div class="row">
+        <div class="col-md-6" *ngIf="trainingList.length > 0">
+          <section class="mx-2 pb-3">
+            <div class="md-tabs bg-color">
+              <span class="nav-link">Træningsprogram
+                <i class="fa fa-cookie fa-dumbbell fa-icon"></i>
+              </span>
+            </div>
+            <div class="card card-height pt-5">
+              <div class="wrapper" *ngFor="let training of trainingList">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="ms-field plan-margin">
+                      <div class="ms-sub-title">Program Type:</div>
+                      <p>{{ training.name }} gange</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="ms-field text-sm">
+                      <div class="">
+                        <a href="#trainingdetails" class="diet-details" (click)="getTrainingFiles(training.name)">Se program detaljerne</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="col-md-6" *ngIf="dietList.length > 0">
+          <section class="mx-2 pb-3">
+            <div class="md-tabs">
+              <span class="nav-link">Kostprogram
+                <i class="fa fa-cookie fa-icon"></i>
+              </span>
+            </div>
+            <div class="card card-height pt-5">
+              <div class="wrapper" *ngFor="let diet of dietList">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="ms-field plan-margin">
+                      <div class="ms-sub-title">Målet med planen:</div>
+                      <p>{{ diet.name }}</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="ms-field text-sm">
+                      <div class="">{{ diet.calorie }} kcal</div>
+                      <div class="">
+                        <a href="#dietdetails" class="diet-details" (click)="getDietFiles(diet.calorie, diet.name)">Se program detaljerne</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="ms-field">
+                      <div class="ms-sub-title"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      
+      <div class="row">
+          <div class="col-md-4 mb-1">
+              <button class="btn btn-primary ms-button small-text" type="button" (click)="buyTrainingProgram();getTrainingOrDietProgram('Training')">Køb nyt træningsprogram</button>
+          </div>
+          <div class="col-md-4 mb-1">
+              <button class="btn btn-primary ms-button small-text" type="button" (click)="buyBothProgram();getTrainingOrDietProgram('Training & Diet')">Køb både kost - og træningsprogram</button>
+          </div>
+          <div class="col-md-4 mb-1">
+              <button class="btn btn-primary ms-button small-text" type="button" (click)="buyDietProgram();getTrainingOrDietProgram('Diet')">Køb ny kostplan</button>
+          </div>
+            
+      </div>
+      <section *ngIf="showDietDetails && fileListJson" class="section-margin" id="dietdetails">
+        <div class="md-tabs">
+          <span class="nav-link">Kost Detaljer ({{ category }})
+            <a class="hide-tab" (click)="showHideDietDiv()">Skjul</a>
+          </span>
+        </div>
+        <div class="card card-p">
+          <div class="row">
+            <div class="col-md-3 pb-1" *ngFor="let file of fileListJson">
+              <div class="card">
+                <div class="card-body">
+                  <i class="fa fa-file fa-4x center"></i>
+                </div>
+                <div class="download-icon" data-toggle="tooltip" data-placement="top" title="Download" (click)="downloadFile('diet', file.name)">
+                  <button type="button" class="btn ink-reaction btn-floating-action btn-xs btn-primary"><i class="fa fa-arrow-down"></i></button>
+                </div>
+                <div class="card-footer">
+                  <div class="title">{{ file.name }}</div>
+                  <div>
+                    <span class="left">Size: {{ file.size }}</span>
+                    <span class="right">{{ file.createDate }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section *ngIf="showTrainingDetails" class="section-margin" id="trainingdetails">
+        <div class="md-tabs">
+          <span class="nav-link">Trænings detaljer ({{ trainingName }})
+            <a class="hide-tab" (click)="showHideTrainingDiv()">Skjul</a>
+          </span>
+        </div>
+        <div class="card card-p">
+          <div class="row">
+            <div class="col-md-3" *ngFor="let file of trainingFilesList">
+              <div class="card">
+                <div class="card-body">
+                  <i class="fa fa-file fa-4x center"></i>
+                </div>
+                <div class="download-icon" data-toggle="tooltip" data-placement="top" title="Download" (click)="downloadTrainingFile('training', file.name)">
+                  <button type="button" class="btn ink-reaction btn-floating-action btn-xs btn-primary"><i class="fa fa-arrow-down"></i></button>
+                </div>
+                <div class="card-footer">
+                  <div class="title">{{ file.name }}</div>
+                  <div>
+                    <span class="left">Size: {{ file.size }}</span>
+                    <span class="right">{{ file.createDate }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div> -->
+
+<section id="tabs">
+	<div class="container">
+      <div class="col-md-12 nav-border">
+        <nav>
+          <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="personal-information-tab" data-toggle="tab" href="#personal-information"
+              role="tab" aria-controls="personal-information" aria-selected="true">Personlig Information</a>
+            <a class="nav-item nav-link" id="plan-tab" data-toggle="tab" href="#plan" role="tab" aria-controls="plan"
+              aria-selected="false">Planer</a>
+          </div>
+        </nav>
+        <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="personal-information" role="tabpanel" aria-labelledby="personal-information-tab">
+            <div class="wrapper">
+              <div class="row">
+                <form [formGroup]="targetWeightForm">
+                  <div class="col">
+                    <div class="col-xs-12 col-sm-12">
+                      <div class="ms-field left-text">
+                        <span class="ms-field-title">Fødselsdag</span>
+                        <input data-ms class="ms-input" type="text" value="{{ profile.dob }}" [disabled]="true">
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12">
+                      <div class="ms-field left-text">
+                        <span class="ms-field-title">Din målsætning</span>
+                        <input data-ms class="ms-input" type="text" value="{{ profile.goal }}" [disabled]="true">
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12">
+                      <div class="ms-field left-text">
+                        <span class="ms-field-title">Køn</span>
+                        <input data-ms class="ms-input" type="text" value="{{ profile.gender }}" [disabled]="true">
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12">
+                      <div class="ms-field left-text">
+                        <span class="ms-field-title">Vægt (kg)</span>
+                        <input data-ms class="ms-input" type="number" value="{{ recentWeight }}" formControlName="targetWeight">
+                        <div *ngIf="showUpdateWeight" class="alert alert-danger">
+                          Your current weight has been saved.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12">
+                      <div class="ms-field left-text">
+                        <span class="ms-field-title">Højde (cm)</span>
+                        <input data-ms class="ms-input" type="text" value="{{ profile.height }}" [disabled]="true">
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12">
+                      <div class="ms-field left-text">
+                        <span class="ms-field-title">Goal Vægt (kg)</span>
+                        <input data-ms class="ms-input" type="text" value="{{ goalWeight }}" [disabled]="true">
+                      </div>
+                      <div class="ms-control">
+                        <button class="btn btn-primary ms-button" type="button" (click)="updateWeight(targetWeightForm)"
+                          [disabled]="!targetWeightForm.valid">Opdater</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="col">
+                  <div class="text-center doughnut-canvas" style="width: 300px; height: 300px;">
+                    <div style="display: block">
+                      <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"
+                        [colors]="doughnutChartColors"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ms-title col-md-12">
+                  Vægtudvikling
+                </div>
+              </div>
+              <div class="row">
+                <canvas class="line-canvas" baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+                  [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="plan" role="tabpanel" aria-labelledby="plan-tab">
+            <div class="wrapper">
+              <div class="row">
+                <div class="col-md-6" *ngIf="trainingList.length > 0">
+                  <section class="mx-2 pb-3">
+                    <div class="md-tabs bg-color">
+                      <span class="nav-link">Træningsprogram
+                        <i class="fa fa-cookie fa-dumbbell fa-icon"></i>
+                      </span>
+                    </div>
+                    <div class="card card-height pt-5">
+                      <div class="wrapper" *ngFor="let training of trainingList">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="ms-field plan-margin">
+                              <div class="ms-sub-title">Program Type:</div>
+                              <p>{{ training.name }} gange</p>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="ms-field text-sm">
+                              <div class="">
+                                <a href="#trainingdetails" class="diet-details" (click)="getTrainingFiles(training.name)">Se
+                                  program detaljerne</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <div class="col-md-6" *ngIf="dietList.length > 0">
+                  <section class="mx-2 pb-3">
+                    <div class="md-tabs">
+                      <span class="nav-link">Kostprogram
+                        <i class="fa fa-cookie fa-icon"></i>
+                      </span>
+                    </div>
+                    <div class="card card-height pt-5">
+                      <div class="wrapper" *ngFor="let diet of dietList">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="ms-field plan-margin">
+                              <div class="ms-sub-title">Målet med planen:</div>
+                              <p>{{ diet.name }}</p>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="ms-field text-sm">
+                              <div class="ms-sub-title">{{ diet.calorie }} kcal</div>
+                              <div class="">
+                                <a href="#dietdetails" class="diet-details" (click)="getDietFiles(diet.calorie, diet.name)">Se
+                                  program detaljerne</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="ms-field">
+                              <div class="ms-sub-title"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-1 mt-1 text-center">
+                  <button class="btn btn-primary ms-button small-text" type="button" (click)="buyTrainingProgram();getTrainingOrDietProgram('Training')">Køb
+                    nyt træningsprogram</button>
+                </div>
+                <div class="col-md-4 mb-1 mt-1 text-center">
+                  <button class="btn btn-primary ms-button small-text" type="button" (click)="buyBothProgram();getTrainingOrDietProgram('Training & Diet')">Køb
+                    både kost - og træningsprogram</button>
+                </div>
+                <div class="col-md-4 mb-1 mt-1 text-center">
+                  <button class="btn btn-primary ms-button small-text" type="button" (click)="buyDietProgram();getTrainingOrDietProgram('Diet')">Køb
+                    ny kostplan</button>
+                </div>
+          
+              </div>
+            </div>
+            <section *ngIf="showDietDetails && fileListJson" class="section-margin" id="dietdetails">
+              <div class="md-tabs">
+                <span class="nav-link">Kost Detaljer ({{ category }})
+                  <a class="hide-tab" (click)="showHideDietDiv()">Skjul</a>
+                </span>
+              </div>
+              <div class="card card-p">
+                <div class="row">
+                  <div class="col-md-3 pb-1" *ngFor="let file of fileListJson">
+                    <div class="card">
+                      <div class="card-body">
+                        <i class="fa fa-file fa-4x center"></i>
+                      </div>
+                      <div class="download-icon" data-toggle="tooltip" data-placement="top" title="Download" (click)="downloadFile('diet', file.name)">
+                        <button type="button" class="btn ink-reaction btn-floating-action btn-xs btn-primary"><i class="fa fa-arrow-down"></i></button>
+                      </div>
+                      <div class="card-footer">
+                        <div class="title">{{ file.name }}</div>
+                        <div>
+                          <span class="left">Size: {{ file.size }}</span>
+                          <span class="right">{{ file.createDate }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section *ngIf="showTrainingDetails" class="section-margin" id="trainingdetails">
+              <div class="md-tabs">
+                <span class="nav-link">Trænings detaljer ({{ trainingName }})
+                  <a class="hide-tab" (click)="showHideTrainingDiv()">Skjul</a>
+                </span>
+              </div>
+              <div class="card card-p">
+                <div class="row">
+                  <div class="col-md-3" *ngFor="let file of trainingFilesList">
+                    <div class="card">
+                      <div class="card-body">
+                        <i class="fa fa-file fa-4x center"></i>
+                      </div>
+                      <div class="download-icon" data-toggle="tooltip" data-placement="top" title="Download" (click)="downloadTrainingFile('training', file.name)">
+                        <button type="button" class="btn ink-reaction btn-floating-action btn-xs btn-primary"><i class="fa fa-arrow-down"></i></button>
+                      </div>
+                      <div class="card-footer">
+                        <div class="title">{{ file.name }}</div>
+                        <div>
+                          <span class="left">Size: {{ file.size }}</span>
+                          <span class="right">{{ file.createDate }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+	</div>
+</section>
+
+<div class="modal-overlay" [ngClass]="activeTrainingProgram">
+  <div class="modal full-screen-modal" [ngClass]="activeTrainingProgram">
+
+    <a class="close-modal close-icon" (click)="buyTrainingProgram()" #closeTrainingModal>
+      <svg viewBox="0 0 20 20">
+        <path fill="#000000" d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
+      </svg>
+    </a>
+    <div class="modal-content modal-position">
+      <div class="container">
+        <form [formGroup]="newTrainingForm">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row mt-5">
+                <div class="col-sm-12">
+                  <div class="text-center">Hvor mange gange om ugen kunne du tænke dig at træne?</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 mt-2 text-center">
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="1-3" formControlName="trainingPerWeek">
+                    <span class="outside">
+                      <span class="inside"></span></span>1-3 Gange</label>
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="4" formControlName="trainingPerWeek">
+                    <span class="outside"><span class="inside"></span></span>4 Gange</label>
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="5" formControlName="trainingPerWeek"><span class="outside"><span
+                        class="inside"></span></span>
+                    5 Gange</label>
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="6" formControlName="trainingPerWeek"><span class="outside"><span
+                        class="inside"></span></span>
+                    6 Gange</label>
+                  <div *ngIf="newTrainingForm.controls.trainingPerWeek.touched && newTrainingForm.controls.trainingPerWeek.errors">
+                    <div class="alert alert-danger" *ngIf="newTrainingForm.controls.trainingPerWeek.errors.required">
+                        Trænings skal bruges.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="price">
+              Pris {{ newPlanPrice }},-
+            </div>
+          </div>
+          <div class="row payment-info">
+            <div class="col-lg-12">
+              <div class="row">
+                <div class="col-sm-12">
+                  <h5 class="ms-subtitle">Betalings Information</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                  <div class="ms-field">
+                    <span class="ms-field-title">Kortholderens Email<sup>*</sup></span>
+                    <input class="ms-input" type="text" formControlName="cardHolderName">
+                    <div *ngIf="newTrainingForm.controls.cardHolderName.touched && newTrainingForm.controls.cardHolderName.errors">
+                      <div class="alert alert-danger" *ngIf="newTrainingForm.controls.cardHolderName.errors.required">
+                        Kortholderens Email skal bruges.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                  <div class="ms-field">
+                    <span class="ms-field-title">Kortnummer<sup>*</sup></span>
+                    <input class="ms-input" type="number" formControlName="cardNumber">
+                    <div *ngIf="newTrainingForm.controls.cardNumber.touched && newTrainingForm.controls.cardNumber.errors">
+                      <div class="alert alert-danger" *ngIf="newTrainingForm.controls.cardNumber.errors.required">
+                        Kortnummer skal bruges.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                  <div class="ms-field">
+                    <span class="ms-field-title">Udløbsdato<sup>*</sup></span>
+                    <input class="ms-input" type="text" formControlName="expiryDate" placeholder="(MM/YY)">
+                    <div *ngIf="newTrainingForm.controls.expiryDate.touched && newTrainingForm.controls.expiryDate.errors">
+                      <div class="alert alert-danger" *ngIf="newTrainingForm.controls.expiryDate.errors.required">
+                        Udløbsdato skal bruges.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <div class="ms-field">
+                    <span class="ms-field-title">Kontrolnummer<sup>*</sup></span>
+                    <input class="ms-input" type="number" formControlName="cvc">
+                    <div *ngIf="newTrainingForm.controls.cvc.touched && newTrainingForm.controls.cvc.errors">
+                      <div class="alert alert-danger" *ngIf="newTrainingForm.controls.cvc.errors.required">
+                        Kontrolnummer skal bruges.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="ms-control text-center">
+              <div class="ms-control">
+                <button class="btn btn-primary ms-button" type="button" [disabled]="!newTrainingForm.valid" (click)="addNewTrainingProgram(newTrainingForm)">
+                  Betal
+                  <i class="fa fa-lock"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="col-sm-12">
+            <p class="terms">Ved betaling accepterer du samtidig vores gældende <a target="_blank" [routerLink]="['/terms']" [routerLinkActive]="['router-link-active']"
+              [routerLinkActiveOptions]="{exact:true}">handelsbetingelser.</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" [ngClass]="activeDietProgram">
+    <div class="modal full-screen-modal" [ngClass]="activeDietProgram">
+  
+      <a class="close-modal close-icon" (click)="buyDietProgram()" #closeDietModal>
+        <svg viewBox="0 0 20 20">
+          <path fill="#000000" d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
+        </svg>
+      </a>
+      <div class="modal-content modal-position">
+        <div class="container">
+          <form [formGroup]="newDietForm">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="row mt-5">
+                  <div class="col-sm-12">
+                    <div class="text-center">Hvilken Diæt type vil du gerne følge?</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 mt-2 text-center">
+                    <label class="radio-label">
+                      <input type="radio" class="radio-inline" value="High Carb" formControlName="dietPlan">
+                      <span class="outside">
+                        <span class="inside"></span></span>High Carb</label>
+                    <label class="radio-label">
+                      <input type="radio" class="radio-inline" value="Low Carb" formControlName="dietPlan">
+                      <span class="outside"><span class="inside"></span></span>Low Carb</label>
+                    <label class="radio-label">
+                      <input type="radio" class="radio-inline" value="Vegetar" formControlName="dietPlan"><span class="outside"><span
+                          class="inside"></span></span>
+                      Vegetar</label>
+                    <label class="radio-label">
+                      <input type="radio" class="radio-inline" value="Low FodMap" formControlName="dietPlan"><span class="outside"><span
+                          class="inside"></span></span>
+                      Low FodMap</label>
+                    <div *ngIf="newDietForm.controls.dietPlan.touched && newDietForm.controls.dietPlan.errors">
+                      <div class="alert alert-danger" *ngIf="newDietForm.controls.dietPlan.errors.required">
+                        Kostplan skal bruges.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="price">
+                Pris {{ newPlanPrice }},-
+              </div>
+            </div>
+            <div class="row payment-info">
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h5 class="ms-subtitle">Betalings Information</h5>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12">
+                    <div class="ms-field">
+                      <span class="ms-field-title">Kortholderens Email<sup>*</sup></span>
+                      <input class="ms-input" type="text" formControlName="cardHolderName">
+                      <div *ngIf="newDietForm.controls.cardHolderName.touched && newDietForm.controls.cardHolderName.errors">
+                        <div class="alert alert-danger" *ngIf="newDietForm.controls.cardHolderName.errors.required">
+                          Kortholderens Email skal bruges.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12">
+                    <div class="ms-field">
+                      <span class="ms-field-title">Kortnummer<sup>*</sup></span>
+                      <input class="ms-input" type="number" formControlName="cardNumber">
+                      <div *ngIf="newDietForm.controls.cardNumber.touched && newDietForm.controls.cardNumber.errors">
+                        <div class="alert alert-danger" *ngIf="newDietForm.controls.cardNumber.errors.required">
+                          Kortnummer skal bruges.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-6">
+                    <div class="ms-field">
+                      <span class="ms-field-title">Udløbsdato<sup>*</sup></span>
+                      <input class="ms-input" type="text" formControlName="expiryDate" placeholder="(MM/YY)">
+                      <div *ngIf="newDietForm.controls.expiryDate.touched && newDietForm.controls.expiryDate.errors">
+                        <div class="alert alert-danger" *ngIf="newDietForm.controls.expiryDate.errors.required">
+                          Udløbsdato skal bruges.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6">
+                    <div class="ms-field">
+                      <span class="ms-field-title">Kontrolnummer<sup>*</sup></span>
+                      <input class="ms-input" type="number" formControlName="cvc">
+                      <div *ngIf="newDietForm.controls.cvc.touched && newDietForm.controls.cvc.errors">
+                        <div class="alert alert-danger" *ngIf="newDietForm.controls.cvc.errors.required">
+                          Kontrolnummer skal bruges.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="showStripeErrorMsg" class="alert alert-danger stripe-error">
+              {{ stripeErrorMsg }}
+            </div>
+            <div class="col-sm-12">
+              <div class="ms-control text-center">
+                <div class="ms-control">
+                  <button class="btn btn-primary ms-button" type="button" [disabled]="!newDietForm.valid" (click)="addNewDietProgram(newDietForm)">
+                    Betal
+                    <i class="fa fa-lock"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="col-sm-12">
+              <p class="terms">Ved betaling accepterer du samtidig vores gældende <a target="_blank" [routerLink]="['/terms']" [routerLinkActive]="['router-link-active']"
+                [routerLinkActiveOptions]="{exact:true}">handelsbetingelser.</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal-overlay" [ngClass]="activeBothProgram">
+  <div class="modal doubleFormModel" [ngClass]="activeBothProgram">
+
+    <a class="close-modal close-icon" (click)="buyBothProgram()" #closeBothModal>
+      <svg viewBox="0 0 20 20">
+        <path fill="#000000" d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
+      </svg>
+    </a>
+    <div class="modal-content modal-position">
+      <div class="container">
+        <form [formGroup]="newBothForm">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row mt-2">
+                <div class="col-sm-12">
+                  <div class="text-center">Hvor mange gange om ugen kunne du tænke dig at træne?</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 mt-2 text-center">
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="1-3" formControlName="trainingPerWeek">
+                    <span class="outside">
+                      <span class="inside"></span></span>1-3 Gange</label>
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="4" formControlName="trainingPerWeek">
+                    <span class="outside"><span class="inside"></span></span>4 Gange</label>
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="5" formControlName="trainingPerWeek"><span class="outside"><span
+                        class="inside"></span></span>
+                    5 Gange</label>
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="6" formControlName="trainingPerWeek"><span class="outside"><span
+                        class="inside"></span></span>
+                    6 Gange</label>
+                  <div *ngIf="newBothForm.controls.trainingPerWeek.touched && newBothForm.controls.trainingPerWeek.errors">
+                    <div class="alert alert-danger" *ngIf="newBothForm.controls.trainingPerWeek.errors.required">
+                      Trænings skal bruges.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row mt-5">
+                <div class="col-sm-12">
+                  <div class="text-center">Hvilken Diæt type vil du gerne følge?</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 text-center">
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="High Carb" formControlName="dietPlan">
+                    <span class="outside">
+                      <span class="inside"></span></span>High Carb</label>
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="Low Carb" formControlName="dietPlan">
+                    <span class="outside"><span class="inside"></span></span>Low Carb</label>
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="Vegetar" formControlName="dietPlan"><span class="outside"><span
+                        class="inside"></span></span>
+                    Vegetar</label>
+                  <label class="radio-label">
+                    <input type="radio" class="radio-inline" value="Low FodMap" formControlName="dietPlan"><span class="outside"><span
+                        class="inside"></span></span>
+                    Low FodMap</label>
+                  <div *ngIf="newBothForm.controls.dietPlan.touched && newBothForm.controls.dietPlan.errors">
+                    <div class="alert alert-danger" *ngIf="newBothForm.controls.dietPlan.errors.required">
+                      Kostplan skal bruges.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="price mt-0">
+              Pris {{ newPlanPrice }},-
+            </div>
+          </div>
+          <div class="row payment-info">
+            <div class="col-lg-12">
+              <div class="row">
+                <div class="col-sm-12">
+                  <h5 class="ms-subtitle">Betalings Information</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                  <div class="ms-field">
+                    <span class="ms-field-title">Kortholderens Email<sup>*</sup></span>
+                    <input class="ms-input" type="text" formControlName="cardHolderName">
+                    <div *ngIf="newBothForm.controls.cardHolderName.touched && newBothForm.controls.cardHolderName.errors">
+                      <div class="alert alert-danger" *ngIf="newBothForm.controls.cardHolderName.errors.required">
+                        Kortholderens Email skal bruges.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                  <div class="ms-field">
+                    <span class="ms-field-title">Kortnummer<sup>*</sup></span>
+                    <input class="ms-input" type="number" formControlName="cardNumber">
+                    <div *ngIf="newBothForm.controls.cardNumber.touched && newBothForm.controls.cardNumber.errors">
+                      <div class="alert alert-danger" *ngIf="newBothForm.controls.cardNumber.errors.required">
+                        Kortnummer skal bruges.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                  <div class="ms-field">
+                    <span class="ms-field-title">Udløbsdato<sup>*</sup></span>
+                    <input class="ms-input" type="text" formControlName="expiryDate" placeholder="(MM/YY)">
+                    <div *ngIf="newBothForm.controls.expiryDate.touched && newBothForm.controls.expiryDate.errors">
+                      <div class="alert alert-danger" *ngIf="newBothForm.controls.expiryDate.errors.required">
+                        Udløbsdato skal bruges.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <div class="ms-field">
+                    <span class="ms-field-title">Kontrolnummer<sup>*</sup></span>
+                    <input class="ms-input" type="number" formControlName="cvc">
+                    <div *ngIf="newBothForm.controls.cvc.touched && newBothForm.controls.cvc.errors">
+                      <div class="alert alert-danger" *ngIf="newBothForm.controls.cvc.errors.required">
+                        Kontrolnummer skal bruges.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="showStripeErrorMsg" class="alert alert-danger stripe-error">
+            {{ stripeErrorMsg }}
+          </div>
+          <div class="col-sm-12">
+            <div class="ms-control text-center">
+              <div class="ms-control">
+                <button class="btn btn-primary ms-button" type="button" [disabled]="!newBothForm.valid" (click)="addNewBothProgram(newBothForm)">
+                  Betal
+                  <i class="fa fa-lock"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="col-sm-12">
+          <p class="terms">Ved betaling accepterer du samtidig vores gældende <a target="_blank" [routerLink]="['/terms']"
+              [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">handelsbetingelser.</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+<div class="container">
+  <ngx-loading [show]="loading"></ngx-loading>
+</div>

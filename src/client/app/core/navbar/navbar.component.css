@@ -1,0 +1,102 @@
+.login-modal {
+  cursor: pointer !important;
+  /* color: #2d3136 !important; */
+}
+
+.ms-button {
+  position: relative;
+  margin-bottom: -1px;
+  background-color: #fff;
+  margin-right: 7px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-right: 0;
+  border-left: 0;
+  border-radius: 0;
+  display: inline-block;
+  border-radius: 5px;
+  z-index: 2;
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+  padding: 0.5rem 1.25rem;
+  font-family: "poppins", sans-serif;
+  cursor: pointer;
+  text-transform: none !important;
+  margin-top: 2em;
+}
+
+.modal-width {
+  width: 25em;
+  height: 20em;
+}
+
+.navbar-content {
+  width: 17rem;
+  padding: 10px;
+  padding-bottom: 0px;
+}
+.navbar-content:before,
+.navbar-content:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.navbar-nav.navbar-right:last-child {
+  margin-right: 15px !important;
+}
+.navbar-footer {
+  background-color: #ddd;
+}
+.navbar-footer-content {
+  padding: 0.5em 0;
+}
+.dropdown-menu {
+  padding: 0px;
+  overflow: hidden;
+}
+/* Fixes dropdown menus placed on the right side */
+.ml-auto .dropdown-menu {
+  left: auto !important;
+  right: 0px;
+}
+
+.ms-label-tab {
+  font-family: "poppins", sans-serif;
+  font-size: 1.3rem;
+}
+
+.ms-sub-title {
+  font-family: "poppins", sans-serif;
+  font-size: 1.1rem;
+}
+
+.pt-half {
+  padding-top: 0.5em;
+}
+
+.word-break {
+  word-break: break-all;
+}
+
+.profile-div {
+  background: #f2f2f2;
+}
+
+.profile-text {
+  color: #007bff;
+  font-size: 1em;
+  text-align: center;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+}
+
+.text-small {
+  font-size: 12px !important;
+}
+
+@media screen and (min-width: 992px) {
+  .profile-position {
+    left: -10px !important;
+    top: 10px !important;
+  }
+}

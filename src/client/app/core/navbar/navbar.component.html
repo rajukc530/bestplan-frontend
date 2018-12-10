@@ -1,0 +1,118 @@
+<header class="header-nav" [ngClass]="offSetScroll > 80 ? 'change-nav': ''">
+  <div class="container">
+
+    <h1 class="logo h-logo"><a [routerLink]="['/']" [routerLinkActive]="['router-link-active']"
+        [routerLinkActiveOptions]="{exact:true}"><img src="assets/images/logo-02.svg" alt=""></a>></h1>
+
+    <nav class="site-nav" [ngClass]="navClass">
+      <ul>
+        <li *ngIf="currentUrl === '/'"><a pageScroll href="#why-us">Hvorfor os?</a></li>
+        <li *ngIf="currentUrl ==='/'"><a pageScroll href="#how-it-work">Sådan fungere det?</a></li>
+        <li *ngIf="currentUrl ==='/'"><a pageScroll href="#start">Start</a></li>
+        <li *ngIf="!isLoggedIn"><a class="nb1 login-modal" (click)="clickOpenModalBtn()">Login</a></li>
+        <!-- <li *ngIf="isLoggedIn"><a class="nb1 login-modal">My Profile</a></li> -->
+        <li class="dropdown" *ngIf="isLoggedIn">
+          <a href="#" class=" nav-link dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-user-circle"></i> <span class="ms-sub-title"> Min Profil</span>
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu profile-position">
+            <li>
+              <div class="navbar-content">
+                <div class="row">
+                  <div class="col-md-4">
+                    <i class="fa fa-user-circle fa-4x background-color"></i>
+                    <p class="text-center small">
+                    </p>
+                  </div>
+                  <div class="col-md-8">
+                    <span class="ms-sub-title">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+                    <p class="text-muted text-small word-break">
+                      {{ currentUser.email }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row" *ngIf="currentUrl !== '/profile'">
+                  <div class="col-md-12 profile-div">
+                    <a [routerLink]="['/profile']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}"
+                      class="profile-text">Min Profil</a>
+                  </div>
+                </div>
+              </div>
+              <div class="navbar-footer">
+                <div class="navbar-footer-content">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <!-- <div class="col-md-6">
+                              <a href="#" class="btn btn-default btn-sm">Change password</a>
+                           </div>
+                           <div class="col-md-6">
+                              <a class="btn btn-default btn-sm pull-right">Sign Out</a>
+                           </div> -->
+                      <div class="text-center">
+                        <a class="btn btn-default" (click)="doLogout()">
+                          <span>
+                            Log ud
+                          </span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+    </nav>
+
+    <div class="modal-overlay" [ngClass]="activeClass">
+      <div class="modal modal-width" [ngClass]="activeClass">
+
+        <a class="close-modal" (click)="clickOpenModalBtn()" #closeModalBtn>
+          <svg viewBox="0 0 20 20">
+            <path fill="#000000" d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
+          </svg>
+        </a>
+
+        <div class="modal-content">
+          <div id="section-1" class="ms-content">
+            <form [formGroup]="loginForm">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="ms-field">
+                      <span class="ms-field-title">Email<sup>*</sup></span>
+                      <input class="ms-input" type="text" formControlName="email">
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="ms-field">
+                          <span class="ms-field-title">Adgangskode<sup>*</sup></span>
+                          <input class="ms-input" type="password" formControlName="password">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div *ngIf="loginError" class="alert alert-danger">Email eller Adgangskode er forkert</div>
+                </div>
+
+              </div>
+              <div class="ms-control text-center">
+                <button class="btn btn-primary ms-button" type="button" [disabled]="!loginForm.valid" (click)="doLogin(loginForm)">Login</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="menu-toggle" [ngClass]="toggleClass" (click)="clickNavIcon()">
+      <div class="hamburger"></div>
+    </div>
+  </div>
+</header>
